@@ -1,0 +1,29 @@
+<?php
+/** @var $this FolderProject */
+?>
+<li class="project">
+	<div class="float-right">
+		<a href="?path=<?= urlencode($this->path) .'&action=pin' ?>">
+			<i class="fa fa-thumb-tack" aria-hidden="true"></i>
+		</a>
+	</div>
+	<h5>
+		<a href="?path=<?= urlencode($this->path) ?>">
+			<?= basename($this->path) ?>
+			(<?= $this->countFiles($this->path) ?>)
+		</a>
+		<a href="#" onclick="return copy(this);">Copy
+			<input value="<?= realpath(__DIR__.'/../../'.$this->path) ?>" style="display: none;" title="Windows path"/>
+		</a>
+	</h5>
+	<?php if ($this->isProject()) { ?>
+		<ul>
+			<?= output($this->showProjectInfo()) ?>
+			<?= output($this->showSubs()) ?>
+		</ul>
+	<?php } else { ?>
+		<ul>
+			<?= output($this->showSubs()) ?>
+		</ul>
+	<?php } ?>
+</li>

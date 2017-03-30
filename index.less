@@ -1,0 +1,129 @@
+html, body, div, span, h1, h2, h3, h4, h5, h6, p, blockquote, q, pre, a, big, em, font, img, q, s, small, strike, strong, sub, sup, b, u, i, center, ol, ul, li, table, tr, th, td {
+	font-size: 100%;
+	background: transparent;
+	padding: 0;
+	border: 0;
+	margin: 0;
+	outline: 0;
+	vertical-align: baseline;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	line-height: 1em;
+}
+
+div {
+	overflow: auto;
+	overflow: hidden;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+	content: '';
+	content: none;
+}
+
+:focus {
+	outline: 0;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+img {
+	vertical-align: bottom;
+}
+
+body {
+	background: #eee;
+	margin: 1em;
+}
+
+#content {
+	font-family: Calibri, Tahoma, sans-serif;
+	background: #fff;
+	padding: 1em;
+	margin: 0 auto;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+h1 {
+	font-size: 36pt;
+	line-height: 100%;
+	margin-bottom: 14pt;
+}
+
+p, ul {
+	font-size: 14pt;
+	line-height: 110%;
+	margin-bottom: 14pt;
+}
+
+small {
+	font-size: 10pt;
+	line-height: 110%;
+	margin-bottom: 10pt;
+}
+
+ul {
+	margin-left: 1em;
+	margin-bottom: 16pt;
+	&.bare {
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		&:after {
+			clear: both;
+			content: " ";
+			display: block;
+		}
+	}
+}
+
+a {
+	text-decoration: none;
+}
+
+code, tt {
+	font-size: 13pt;
+	font-weight: bold;
+	color: #333;
+}
+
+li.project {
+	display: block;
+	border: solid 1px silver;
+	margin: 0.5em;
+	padding: 0.5em;
+	float: left;
+	width: 31%;
+	min-height: 5em;
+	overflow: hidden;
+	h5 {
+		margin-bottom: 0.5em;
+	}
+}
+
+ul.pinned li.project {
+	background-color: #f8f8f8;
+}
+
+
+.float-right {
+	float: right;
+}
