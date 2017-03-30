@@ -101,4 +101,8 @@ class FolderProject {
 		return $content;
 	}
 
+	function isPinned() {
+		return in_array($this->path, $_SESSION['pin']);
+	}
+
 }

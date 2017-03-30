@@ -87,4 +87,10 @@ class ProjectLister {
 		return $content;
 	}
 
+	function unpinAction() {
+		$key = array_search($this->path, $_SESSION['pin']);
+		//debug($_SESSION['pin'], $key);
+		array_splice($_SESSION['pin'], $key, 1);
+	}
+
 }
