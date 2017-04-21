@@ -22,11 +22,11 @@ function debug($a) {
 	echo '</pre>';
 }
 
-require_once __DIR__ . '/ArrayObjectSafe.php';
+require_once __DIR__ . '/src/ArrayObjectSafe.php';
 $request = new ArrayObjectSafe($_REQUEST);
 $path = $request->path ?: '.';
 
-require_once __DIR__ . '/ProjectLister.php';
+require_once __DIR__ . '/src/ProjectLister.php';
 $p = new ProjectLister($path);
 $p->performAction();
 require __DIR__.'/template.phtml';

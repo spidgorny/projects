@@ -18,8 +18,12 @@
 			<?= basename($this->path) ?>
 			(<?= $this->countFiles($this->path) ?>)
 		</a>
-		<a href="#" onclick="return copy(this);">Copy
-			<input value="<?= realpath(__DIR__.'/../../'.$this->path) ?>" style="display: none;" title="Windows path"/>
+		<a href="<?= ($this->path) ?>" target="<?= basename($this->path) ?>">
+			<i class="fa fa-external-link" aria-hidden="true"></i>
+		</a>
+		<a href="#" onclick="return copy(this);">
+			<i class="fa fa-clipboard" aria-hidden="true"></i>
+			<input value="<?= realpath(__DIR__ . '/../NetBeansProjects/' .$this->path) ?>" style="display: none;" title="Windows path"/>
 		</a>
 	</h5>
 	<?php if ($this->isProject()) { ?>
