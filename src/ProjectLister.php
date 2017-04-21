@@ -28,13 +28,8 @@ class ProjectLister {
 
 	function render() {
 		$content = [];
-		$content[] = $this->showPinned();
+		$content[] = $this->showBreadcrumbs();
 		if ($this->isProject()) {
-			$project = new FolderProject($this->path);
-			$content[] = '<ul class="bare main">';
-			$content[] = $project->render();
-			$content[] = '</ul>';
-			$content[] = '<hr />';
 			$content[] = '<ul class="bare">';
 			$content[] = $this->showSubProjects();
 			$content[] = '</ul>';
@@ -48,17 +43,23 @@ class ProjectLister {
 
 	function showSubProjects() {
 		$content = [];
+		$contentFiles = [];
 		$files = $this->getFolders();
 		foreach ($files as $file) {
 			//$isProject = $this->isProject($this->path.'/'.$file);
 			$isProject = is_dir($this->path.'/'.$file);
 			if ($isProject) {
 				$project = new FolderProject($this->path . '/' . $file);
-				$content[] = $project->render();
+				if ($project->isProject()) {
+					$content[] = $project->render();
+				} elseif ($project->hasProjects()) {
+					$contentFiles[] = '<li>'.$project->getNameLink().'</li>';
+				}
 			}
 		}
-		$content = ['<ul class="bare">', $content, '</ul>'];
-		return $content;
+		$out[] = ['<ul class="bare">', $content, '</ul>'];
+		$out[] = ['<ul class="bare">', $contentFiles, '</ul>'];
+		return $out;
 	}
 
 	function filterFiles(array $files) {
@@ -98,6 +99,31 @@ class ProjectLister {
 		$key = array_search($this->path, $_SESSION['pin']);
 		//debug($_SESSION['pin'], $key);
 		array_splice($_SESSION['pin'], $key, 1);
+	}
+
+	function sidebar() {
+		$project = new FolderProject($this->path);
+		$content[] = $project->renderDetails();
+
+		$content[] = $this->showPinned();
+		return $content;
+	}
+
+	private function showBreadcrumbs() {
+		$content = [];
+
+		$acc = [];
+		$parts = explode('/', $this->path);
+		if ($parts[0] != '.') {
+			$parts = array_merge(['.'], $parts);
+		}
+		foreach ($parts as $sub) {
+			$acc[] = $sub;
+			$path = implode('/', $acc);
+			$content[] = '<li><a href="'.$path.'">'.$sub.'</a></li>';
+		}
+		$content = ['<ul class="breadcrumb">', $content, '</ul>'];
+		return $content;
 	}
 
 }

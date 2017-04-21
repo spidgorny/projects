@@ -9,14 +9,26 @@ class FolderProject {
 	}
 
 	function render() {
-		$content = '';
-		if ($this->isProject() && $this->hasProjects()) {
-			ob_start();
-			require __DIR__ . '/FolderProject.phtml';
-			$content = ob_get_clean();
-		} else {
-			$content .= '<li>'.$this->path.'</li>';
-		}
+		ob_start();
+		$links = '';
+		$panelClass = 'info';
+		require __DIR__ . '/FolderProject.phtml';
+		$content = ob_get_clean();
+		return $content;
+	}
+
+	function renderDetails() {
+		ob_start();
+		$links = '<a href="'. ($this->path) .'" target="'. basename($this->path) .'">
+				<i class="fa fa-external-link" aria-hidden="true"></i>
+			</a>
+			<a href="#" onclick="return copy(this);">
+				<i class="fa fa-clipboard" aria-hidden="true"></i>
+				<input value="'.realpath(__DIR__ . '/../NetBeansProjects/' .$this->path).'" style="display: none;" title="Windows path"/>
+			</a>';
+		$panelClass = 'success';
+		require __DIR__ . '/FolderProject.phtml';
+		$content = ob_get_clean();
 		return $content;
 	}
 
@@ -84,12 +96,24 @@ class FolderProject {
 		if ($isGit) {
 			$content[] = '<i class="fa fa-github" aria-hidden="true"
 			title="'. htmlspecialchars($path).'"></i>';
+			exec('cd '.$path.'&& git rev-list --count HEAD', $lines);
+			$id = $lines[0];
+			exec('cd '.$path.'&& git rev-parse HEAD', $hash);
+			$hash = substr($hash[0], 0, 12);
+			$content[] = '<span class="label label-default code">'.
+				$hash . '<span class="badge">'.$id.'</span>
+			</span>';
 		}
 
 		$isHG = is_dir($path.'/.hg');
 		if ($isHG) {
 			$content[] = '<i class="fa fa-bitbucket" aria-hidden="true"
 			title="'. htmlspecialchars($path).'"></i>';
+			exec('cd '.$path.'&& hg id -ni', $output);
+			list($hash, $id) = explode(' ', $output[0]);
+			$content[] = '<span class="label label-default code">'.
+				$hash . '<span class="badge">'.$id.'</span>
+			</span>';
 		}
 
 		if (!$content) {
@@ -114,6 +138,20 @@ class FolderProject {
 
 	function isPinned() {
 		return in_array($this->path, $_SESSION['pin']);
+	}
+
+	public function getNameLink() {
+		return '<a href="?path='.$this->path.'">'.$this->path.'</a>';
+	}
+
+	function showIcon() {
+		$content = [];
+		$images = glob($this->path.'/*.{jpg,png,gif,ico}', GLOB_BRACE);
+		foreach ($images as $path) {
+			$content[] = '<img src="'.$path.'" width="32" height="32" style="background: white;"/> ';
+			break;
+		}
+		return output($content);
 	}
 
 }
