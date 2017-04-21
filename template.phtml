@@ -7,18 +7,12 @@
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="slawa/projects/index.css" />
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-	<title>Project Manager</title>
+	<title><?= $this->shortName ?> :: Project Manager</title>
 </head>
 <body>
 <h1>
-	Projects in <?= basename(realpath($path)) ?>
-	<a href="?path=<?=
-		substr(
-		str_replace(
-			realpath(__DIR__.'/../../'), '',
-				dirname(realpath($path)))
-			, 1)
-	?>">
+	Projects in <?= $this->shortName ?>
+	<a href="?path=<?= $this->parentFolder ?>">
 		<i class="fa fa-level-up" aria-hidden="true"></i>
 	</a>
 </h1>

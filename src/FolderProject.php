@@ -9,9 +9,14 @@ class FolderProject {
 	}
 
 	function render() {
-		ob_start();
-		require __DIR__ . '/FolderProject.phtml';
-		$content = ob_get_clean();
+		$content = '';
+		if ($this->isProject() && $this->hasProjects()) {
+			ob_start();
+			require __DIR__ . '/FolderProject.phtml';
+			$content = ob_get_clean();
+		} else {
+			$content .= '<li>'.$this->path.'</li>';
+		}
 		return $content;
 	}
 
@@ -24,6 +29,12 @@ class FolderProject {
 		return array_reduce($all, function ($acc, $el) use ($path) {
 			return $acc || is_file($path . '/' . $el);
 		}, false);
+	}
+
+	function hasProjects() {
+		//debug($this->path);
+		$children = new FolderScanner($this->path);
+		return $children->hasProjects();
 	}
 
 	function countFiles($path) {

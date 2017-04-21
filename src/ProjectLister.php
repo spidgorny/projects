@@ -31,10 +31,17 @@ class ProjectLister {
 		$content[] = $this->showPinned();
 		if ($this->isProject()) {
 			$project = new FolderProject($this->path);
+			$content[] = '<ul class="bare main">';
 			$content[] = $project->render();
+			$content[] = '</ul>';
+			$content[] = '<hr />';
+			$content[] = '<ul class="bare">';
 			$content[] = $this->showSubProjects();
+			$content[] = '</ul>';
 		} else {
+			$content[] = '<ul class="bare">';
 			$content[] = $this->showSubProjects();
+			$content[] = '</ul>';
 		}
 		return $content;
 	}
