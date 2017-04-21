@@ -120,7 +120,7 @@ class ProjectLister {
 		foreach ($parts as $sub) {
 			$acc[] = $sub;
 			$path = implode('/', $acc);
-			$content[] = '<li><a href="'.$path.'">'.$sub.'</a></li>';
+			$content[] = '<li><a href="?path='.$path.'">'.$sub.'</a></li>';
 		}
 		$content = ['<ul class="breadcrumb">', $content, '</ul>'];
 		return $content;

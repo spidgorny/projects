@@ -1,0 +1,51 @@
+<?php
+/** @var $this FolderProject */
+?>
+<div class="panel panel-<?= $panelClass ?>">
+	<div class="panel-heading">
+		<h4>
+			<?= $this->showIcon() ?>
+			<a href="?path=<?= urlencode($this->path) ?>" style="color: white">
+				<?= ($this->path) ?>
+				(<?= $this->countFiles($this->path) ?>)
+			</a>
+		</h4>
+	</div>
+	<div class="panel-body">
+		<?php if ($this->isProject()) { ?>
+			<ul class="bare">
+				<?= output($this->showProjectInfo()) ?>
+				<?= output($this->showSubs()) ?>
+			</ul>
+		<?php } else { ?>
+			<ul class="bare">
+				<?= output($this->showSubs()) ?>
+			</ul>
+		<?php } ?>
+	</div>
+	<div class="panel-footer">
+		<h3>
+			<a href="<?= ($this->path) ?>"
+			   target="<?= basename($this->path) ?>">
+				<i class="fa fa-external-link" aria-hidden="true"></i>
+			</a>
+
+			<a href="#" onclick="return copy(this);">
+				<i class="fa fa-clipboard" aria-hidden="true"></i>
+				<input value="<?=
+			realpath(__DIR__ . '/../NetBeansProjects/' .$this->path)
+				?>" style="display: none;" title="Windows path"/>
+			</a>
+
+			<?php if ($this->isPinned()) { ?>
+				<a href="?path=<?= urlencode($this->path) .'&action=unpin' ?>">
+					<i class="fa fa-times" aria-hidden="true"></i>
+				</a>
+			<?php } else { ?>
+				<a href="?path=<?= urlencode($this->path) .'&action=pin' ?>">
+					<i class="fa fa-thumb-tack" aria-hidden="true"></i>
+				</a>
+			<?php } ?>
+		</h3>
+	</div>
+</div>

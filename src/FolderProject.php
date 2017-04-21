@@ -10,7 +10,6 @@ class FolderProject {
 
 	function render() {
 		ob_start();
-		$links = '';
 		$panelClass = 'info';
 		require __DIR__ . '/FolderProject.phtml';
 		$content = ob_get_clean();
@@ -19,15 +18,8 @@ class FolderProject {
 
 	function renderDetails() {
 		ob_start();
-		$links = '<a href="'. ($this->path) .'" target="'. basename($this->path) .'">
-				<i class="fa fa-external-link" aria-hidden="true"></i>
-			</a>
-			<a href="#" onclick="return copy(this);">
-				<i class="fa fa-clipboard" aria-hidden="true"></i>
-				<input value="'.realpath(__DIR__ . '/../NetBeansProjects/' .$this->path).'" style="display: none;" title="Windows path"/>
-			</a>';
 		$panelClass = 'success';
-		require __DIR__ . '/FolderProject.phtml';
+		require __DIR__ . '/FolderProjectDetails.phtml';
 		$content = ob_get_clean();
 		return $content;
 	}
@@ -88,8 +80,10 @@ class FolderProject {
 		return $content;
 	}
 
-	function getRepoIcon($path = NULL) {
+	function getRepoInfo($path = NULL) {
 		$path = $path ?: $this->path;
+		$id = NULL;
+		$hash = NULL;
 		$content = [];
 
 		$isGit = is_dir($path.'/.git');
@@ -100,9 +94,6 @@ class FolderProject {
 			$id = $lines[0];
 			exec('cd '.$path.'&& git rev-parse HEAD', $hash);
 			$hash = substr($hash[0], 0, 12);
-			$content[] = '<span class="label label-default code">'.
-				$hash . '<span class="badge">'.$id.'</span>
-			</span>';
 		}
 
 		$isHG = is_dir($path.'/.hg');
@@ -111,9 +102,6 @@ class FolderProject {
 			title="'. htmlspecialchars($path).'"></i>';
 			exec('cd '.$path.'&& hg id -ni', $output);
 			list($hash, $id) = explode(' ', $output[0]);
-			$content[] = '<span class="label label-default code">'.
-				$hash . '<span class="badge">'.$id.'</span>
-			</span>';
 		}
 
 		if (!$content) {
@@ -121,18 +109,48 @@ class FolderProject {
 			title="'. htmlspecialchars($path).'"></i>';
 		}
 
+		return (object)[
+			'icon' => $content,
+			'id' => $id,
+			'hash' => $hash,
+			];
+	}
+
+	function getRepoIcon($path = NULL) {
+		$repoInfo = $this->getRepoInfo($path);
+		if ($repoInfo->id) {
+			$content[] = $repoInfo->icon;
+			$content[] = '<span class="label label-default code">' .
+				$repoInfo->hash .
+				'<span class="badge">' . $repoInfo->id . '</span>
+			</span>';
+		} else {
+			$content[] = $repoInfo->icon;
+		}
+
 		return $content;
 	}
 
 	function showVersionInfo() {
 		$content = [];
-		$data = json_decode(file_get_contents($this->path.'/VERSION.json'));
+		$data = json_decode(
+			file_get_contents($this->path.'/VERSION.json'));
 		foreach ($data->repos as $repo) {
 			$rPath = $this->path.'/'.$repo->path;
-			$content[] = [
+			$nr = $repo->nr;
+			$repoInfo = $this->getRepoInfo($rPath);
+			if ($repoInfo->id) {
+				if (intval($repoInfo->id) > intval($nr)) {
+					$nr = '<span class="label label-danger">'.$nr.'</span>';
+				} else {
+					$nr = '<span class="label label-success">'.$nr.'</span>';
+				}
+			}
+			$content[] = ['<li>',
 				$this->getRepoIcon($rPath), ' ',
-				basename($repo->path).' ['.$repo->nr.']', BR];
+				basename($repo->path).' '.$nr.'', '</li>'];
 		}
+		$content = ['<ul class="bare">', $content, '</ul>'];
 		return $content;
 	}
 
