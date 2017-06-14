@@ -49,7 +49,7 @@ class ProjectLister {
 			//$isProject = $this->isProject($this->path.'/'.$file);
 			$isProject = is_dir($this->path.'/'.$file);
 			if ($isProject) {
-				$project = new FolderProject($this->path . '/' . $file);
+				$project = new FolderProject(Path::make($this->path)->appendString($file));
 				if ($project->isProject()) {
 					$content[] = $project->render();
 				} elseif ($project->hasProjects()) {
@@ -84,7 +84,7 @@ class ProjectLister {
 
 	function showPinned() {
 		$content = [];
-		foreach ($_SESSION['pin'] as $pin) {
+		foreach (ifsetor($_SESSION['pin'], []) as $pin) {
 			$p = new FolderProject($pin);
 			$content[] = $p->render();
 		}

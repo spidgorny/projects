@@ -1,0 +1,14 @@
+{
+    "name": "depidsvy/projects",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Slawa",
+            "email": "depidsvy@nintendo.de"
+        }
+    ],
+    "require": {
+        "funct/funct": "^1.4",
+        "spidgorny/nadlib": "@dev"
+    }
+}

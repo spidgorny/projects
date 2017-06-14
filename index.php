@@ -3,6 +3,12 @@
 define('BR', '<br />'.PHP_EOL);
 session_start();
 
+require_once __DIR__.'/vendor/autoload.php';
+
+/*function ifsetor(&$a, $def = null) {
+	return Funct\ifSetOr($a, $def);
+}*/
+
 function output($content) {
 	if (is_array($content)) {
 		$list = '';
@@ -26,30 +32,5 @@ function autoload($class) {
 	require_once __DIR__ . '/src/'.$class.'.php';
 }
 spl_autoload_register('autoload');
-
-class Index {
-
-	var $parentFolder;
-
-	var $shortName;
-
-	function render() {
-		$request = new ArrayObjectSafe($_REQUEST);
-		$path = $request->path ?: '.';
-
-		$p = new ProjectLister($path);
-		$p->performAction();
-
-		$this->shortName = basename(realpath($path));
-
-		$this->parentFolder = substr(
-			str_replace(
-				realpath(__DIR__.'/../../'), '',
-				dirname(realpath($path)))
-			, 1);
-		require __DIR__ . '/template.phtml';
-	}
-
-}
 
 (new Index())->render();

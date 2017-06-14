@@ -91,7 +91,7 @@ class FolderProject {
 			$content[] = '<i class="fa fa-github" aria-hidden="true"
 			title="'. htmlspecialchars($path).'"></i>';
 			exec('cd '.$path.'&& git rev-list --count HEAD', $lines);
-			$id = $lines[0];
+			$id = $lines ? $lines[0] : 'no id';
 			exec('cd '.$path.'&& git rev-parse HEAD', $hash);
 			$hash = substr($hash[0], 0, 12);
 		}
@@ -155,7 +155,7 @@ class FolderProject {
 	}
 
 	function isPinned() {
-		return in_array($this->path, $_SESSION['pin']);
+		return in_array($this->path, ifsetor($_SESSION['pin'], []));
 	}
 
 	public function getNameLink() {
